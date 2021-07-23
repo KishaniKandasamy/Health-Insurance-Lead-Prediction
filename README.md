@@ -1,4 +1,4 @@
-# Wavw Health-Insurance-Lead-Prediction
+# Wave Health-Insurance-Lead-Prediction
 
 This application allows us to  preprocess raw datasets and train & predict the health Insurance Leads using decision Tree classifier.
 
