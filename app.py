@@ -5,94 +5,84 @@ import numpy as np
 
 @app('/decisiontree')
 async def serve(q: Q):
-    if not q.client.initialized:
-        initialize_app(q)
+    hash = q.args['#']
     
-    id = q.args['#']
-       
-    if id == 'dt':
-        q.page['decision'] = ui.form_card(box='1 12 5 5', items=[ui.progress('Running...')])
+    if hash == 'dt':
+        q.page['decision'] = ui.form_card(box='8 3 2 5', items=[ui.progress('Running...')])
         value = await q.run(dt_training,train,test)
-        ui.message_bar(type='success', text="Model successfully trained!"),
-
-        q.page['decision'] = ui.form_card(box='1 12 5 5', items=[
+        message = 'Decision Tree Model trained successfully'
+        q.page['decision'] = ui.form_card(box='8 3 2 5', items=[
             ui.message_bar('info', message),
             ui.text(make_markdown_table(fields=value.columns.tolist(),rows=value.values.tolist()))
             ])
     await q.page.save()   
+
     
-    if id:
-        if id == 'show_data':
+    if hash:
+        if hash == 'show_data':
             q.page['show_data'].items=[
-                ui.text(make_markdown_table(fields=df.columns.tolist(),rows=df.values.tolist()))
+                ui.text(make_markdown_table(fields=df_point.columns.tolist(),rows=df_point.values.tolist()))
             ]
-        elif id == 'preprocess':
+        elif hash == 'preprocess':
             q.page['preprocess'].items=[
                  ui.text(make_markdown_table(fields=train.columns.tolist(),rows=train.values.tolist()))
             ]
              
-        elif id == 'train':
-            q.page['train'] = ui.form_card(
-            box='4 10 4 2',
-            items=[
-                ui.message_bar(type='warning', text="Click on here to train the model"),
-                ui.button(name='#dt', label='Train with Decision Tree', primary=True),
-            ])
+        
          
     else:
+
+        q.page['header'] = ui.header_card(
+        box='1 1 11 2',
+        title='Health Insurance Lead Prediction',
+        subtitle='Tain and test your data with decisiontree!',
+        )
+
         q.page['nav'] = ui.tab_card(
-            box='5 2 7 1',
+            box='6 2 7 1',
             items=[
-                ui.tab(name='#show_data', label='Show Raw Data'),
-                ui.tab(name='#preprocess', label='Preprocessed Data'),
-                ui.tab(name='#train', label='Train & Predict with DecisionTreeClassifier'),
-               
+                ui.tab(name='#show_data', label='Show Data'),
+                ui.tab(name='#preprocess', label='Preprocess'),
+                ui.tab(name='#dt', label='Train & Predict'),
+                
+                # ui.tab(name='#predict', label='Predict'),
             ],
         )  
         q.page['show_data'] = ui.form_card(
-        box='1 3 9 4',
+        box='1 3 7 3',
         items=[
-            ui.text('Display Raw data here !'),
-            ui.message_bar(type='info', text="To display the raw data Click on Show Raw Data"),
+            
+            ui.text('Display your data here !'),
+            
             ])    
 
         q.page['preprocess'] = ui.form_card(
-        box='1 7 9 4',
+        box='1 6 7 3',
         items=[
-            ui.text('Preprocessing of data'),
-            ui.message_bar(type='info', text="To display the preprocessed data Click on preprocessed Data"),
+            ui.text('Preprocessing of data')
+        ]
             
-        ])
+        )
          
-        await q.page.save()
-
-
-def initialize_app(q):
- 
-
-    q.page['header'] = ui.header_card(
-        box='1 1 11 1',
-        title='Health Insurance Lead Prediction',
-        subtitle='Tain and test your data with decisiontree!',
-    )
     
-#load trainning data
+    await q.page.save()
+
+#Read trainning data
 def load_data():
     data = pd.read_csv('train.csv')
     return data
 
-#load testing data
+#Read testing data
 def test_data():
     data = pd.read_csv('test.csv')
     return data
-    
-    
+
+
 data = load_data()
 test_data = test_data()
+df_point =  data.loc[:200,:]
 
-df =  data.loc[:200,:]
-
-#Data preprocessing 
+#preprocessing step
 def preprocessing(data):
     data = data.drop(['ID'],axis=1)
     data = pd.get_dummies(data, columns=['Accomodation_Type','Reco_Insurance_Type','Is_Spouse'],drop_first=True) 
@@ -111,13 +101,11 @@ def preprocessing(data):
     data = data.drop(['Upper_Age'],axis=1)
     return data
 
-
-#preprocessing the both train and test data
+#preprocess both trainning and testing data
 train = preprocessing(data)
 test = preprocessing(test_data)
 
-
-
+#Decision Tree
 def dt_training(train,test):
     y = train.iloc[:,10].values
     train = train.drop(['Response'],axis=1)
@@ -140,6 +128,7 @@ def make_markdown_table(fields, rows):
         make_markdown_row('---' * len(fields)),
         '\n'.join([make_markdown_row(row) for row in rows]),
     ])
+
 
 
 

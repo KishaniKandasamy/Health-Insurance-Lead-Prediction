@@ -98,3 +98,4 @@ ID,City_Code,Region_Code,Accomodation_Type,Reco_Insurance_Type,Upper_Age,Lower_A
 97,C7,2024,Owned,Individual,24,24,No,,,,2,8162,1
 98,C20,973,Owned,Individual,57,57,No,X1,,,4,13200,0
 99,C2,3132,Owned,Individual,41,41,No,X1,,,22,15598,0
+100,C1,156,Rented,Individual,25,25,No,X4,2,3,16,8974,0
