@@ -41,9 +41,9 @@ async def serve(q: Q):
         q.page['nav'] = ui.tab_card(
             box='6 2 7 1',
             items=[
-                ui.tab(name='#show_data', label='Show Data'),
-                ui.tab(name='#preprocess', label='Preprocess'),
-                ui.tab(name='#dt', label='Train & Predict'),
+                ui.tab(name='#show_data', label='Raw Datast'),
+                ui.tab(name='#preprocess', label='Preprocessed Dataset'),
+                ui.tab(name='#dt', label='Train & Predict with Decision Tree'),
                 
                 # ui.tab(name='#predict', label='Predict'),
             ],
@@ -52,14 +52,14 @@ async def serve(q: Q):
         box='1 3 7 3',
         items=[
             
-            ui.text('Display your data here !'),
+            ui.text('Display Raw Dataset!'),
             
             ])    
 
         q.page['preprocess'] = ui.form_card(
         box='1 6 7 3',
         items=[
-            ui.text('Preprocessing of data')
+            ui.text('Preprocessed Dataset')
         ]
             
         )
