@@ -29,8 +29,7 @@ async def serve(q: Q):
             ]
              
         
-         
-    else:
+      else:
 
         q.page['header'] = ui.header_card(
         box='1 1 11 2',
@@ -60,12 +59,9 @@ async def serve(q: Q):
         box='1 6 7 3',
         items=[
             ui.text('Preprocessed Dataset')
-        ]
-            
-        )
+        ])
          
-    
-    await q.page.save()
+     await q.page.save()
 
 #Read trainning data
 def load_data():
@@ -128,8 +124,4 @@ def make_markdown_table(fields, rows):
         make_markdown_row('---' * len(fields)),
         '\n'.join([make_markdown_row(row) for row in rows]),
     ])
-
-
-
-
  
