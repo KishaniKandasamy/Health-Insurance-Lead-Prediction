@@ -113,10 +113,8 @@ def dt_training(train,test):
     y_pred = pd.DataFrame(y_pred,columns=['DT Predictions'])
     return y_pred
 
-
 def make_markdown_row(values):
     return f"| {' | '.join([str(x) for x in values])} |"
-
 
 def make_markdown_table(fields, rows):
     return '\n'.join([
